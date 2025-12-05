@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212"
+    tools:context=".FavoriteFragment">
+
+    <!-- 1. RecyclerView để hiển thị danh sách phim yêu thích -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_favorites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:listitem="@layout/item_movie"
+        tools:visibility="visible" />
+
+    <!-- 2. Giao diện hiển thị khi danh sách yêu thích trống -->
+    <LinearLayout
+        android:id="@+id/layout_no_favorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_favorite_border"
+            app:tint="#80FFFFFF"
+            android:contentDescription="Danh sách yêu thích trống" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Danh sách yêu thích của bạn đang trống"
+            android:textColor="#80FFFFFF"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</FrameLayout>

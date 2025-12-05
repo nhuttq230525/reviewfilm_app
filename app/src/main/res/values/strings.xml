@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Firebase_demo</string>
+    <string name="login">Login</string>
+    <string name="login_description">Enter your email and password</string>
+    <string name="sign_description">Enter your credentials to continue</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name_sign">Name</string>
+    <string name="email_sing">Email</string>
+    <string name="password_sing">Password</string>
+    <string name="remember">Remember me</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="login_button">Log in</string>
+    <string name="sign_button">Sign Up</string>
+    <string name="tx_sign">Log in.</string>
+    <string name="tx_login">Sign Up</string>
+    <string name="action_search">Tìm kiếm</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="action_about">Thông tin</string>
+    <string name="add_to_favorites">Thêm vào Yêu thích</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
