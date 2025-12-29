@@ -1,52 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MovieListActivity">
+    android:background="@android:color/black">
 
-    <!-- Bạn có thể thêm Toolbar ở đây nếu muốn có thanh tiêu đề riêng -->
-    <!-- Ví dụ: -->
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_movie_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:background="#1F1F1F"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_movie_list"
+    <!-- Nội dung chính -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Danh sách phim -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_movie_list"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="@android:color/white" />
+            android:layout_height="match_parent"
+            android:padding="8dp"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <!-- Vòng loading -->
+        <ProgressBar
+            android:id="@+id/progress_bar_movie_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
 
-    <ProgressBar
-        android:id="@+id/progress_bar_movie_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:visibility="gone"
-        tools:visibility="visible"/>
+        <!-- Chữ thông báo khi không có phim -->
+        <TextView
+            android:id="@+id/tv_no_movies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Không có phim nào"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/tv_no_movies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Không có phim nào trong thể loại này."
-        android:textSize="16sp"
-        android:visibility="gone"
-        tools:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_movie_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:padding="8dp" />
-
+    </RelativeLayout>
 </LinearLayout>

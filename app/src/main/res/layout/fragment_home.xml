@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface"
-    tools:context=".HomeFragment">
+    android:background="@android:color/black"
+    android:padding="10dp">
 
-    <!-- Tiêu đề cho Banner Phim Hot -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Phim Hot"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnSurface"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="16dp"/>
-
-    <!-- ViewPager2 để hiển thị Banner phim hot -->
+    <!-- 1. BANNER (SLIDER) -->
+    <!-- Đưa Banner lên đầu tiên -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/banner_view_pager"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"/>
-    <!-- Ghi chú: paddingStart và paddingEnd là để tạo hiệu ứng nhìn thấy một phần của banner trước và sau -->
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"/>
 
-    <!-- Tiêu đề cho danh sách phim bên dưới -->
+    <!-- 2. DANH SÁCH PHIM DƯỚI -->
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tất cả phim"
-        android:textSize="20sp"
+        android:text="Phim mới cập nhật"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:textColor="?attr/colorOnSurface"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="16dp"/>
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"/>
 
-    <!-- RecyclerView để hiển thị danh sách tất cả các phim -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_movies"
+        android:id="@+id/recycler_view_home"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

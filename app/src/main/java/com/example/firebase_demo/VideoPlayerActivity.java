@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -104,6 +102,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
         return movieId != null && !movieId.isEmpty() && videoUrl != null && !videoUrl.isEmpty();
     }
+
 
     private void bindViews() {
         // Player

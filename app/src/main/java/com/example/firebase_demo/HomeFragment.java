@@ -18,7 +18,6 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
-// --- (1) THÊM CÁC IMPORT CẦN THIẾT ---
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,19 +34,22 @@ import java.util.Set;
 
 public class HomeFragment extends Fragment {
 
+    // --- Khai báo cho phần Banner ---
     private ViewPager2 bannerViewPager;
     private BannerAdapter bannerAdapter;
     private ArrayList<Movie> hotMoviesList;
+    private final Handler bannerHandler = new Handler(Looper.getMainLooper());
+    private Runnable bannerRunnable;
 
+    // --- Khai báo cho phần Danh sách phim ---
     private RecyclerView recyclerViewAllMovies;
     private MovieAdapter allMoviesAdapter;
     private ArrayList<Movie> allMoviesList;
-    private final Handler bannerHandler = new Handler(Looper.getMainLooper());
-    private Runnable bannerRunnable;
+
+    // --- Khai báo cho phần Yêu thích ---
     private Set<String> favoriteMovieIds = new HashSet<>();
     private DatabaseReference userFavoritesRef;
     private ValueEventListener favoriteIdsListener;
-
 
     @Nullable
     @Override
@@ -59,38 +61,42 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // --- Thiết lập Banner ---
+        // --- 1. Thiết lập Banner ---
         bannerViewPager = view.findViewById(R.id.banner_view_pager);
-        hotMoviesList = new ArrayList<>();
-        bannerAdapter = new BannerAdapter(getContext(), hotMoviesList);
-        bannerViewPager.setAdapter(bannerAdapter);
-        setupBannerEffects();
+        if (bannerViewPager != null) {
+            hotMoviesList = new ArrayList<>();
+            bannerAdapter = new BannerAdapter(getContext(), hotMoviesList);
+            bannerViewPager.setAdapter(bannerAdapter);
+            setupBannerEffects();
+        }
 
-        // --- Thiết lập RecyclerView cho Tất cả Phim ---
-        recyclerViewAllMovies = view.findViewById(R.id.recyclerView_movies);
+        // --- 2. Thiết lập RecyclerView cho Tất cả Phim ---
+        // Lưu ý: Kiểm tra lại ID trong XML vừa sửa ở bước 1 xem có khớp không
+        recyclerViewAllMovies = view.findViewById(R.id.recycler_view_home);
+
         allMoviesList = new ArrayList<>();
         allMoviesAdapter = new MovieAdapter(allMoviesList, getContext());
         recyclerViewAllMovies.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewAllMovies.setAdapter(allMoviesAdapter);
-// --- (3) THAY ĐỔI TRÌNH TỰ TẢI DỮ LIỆU ---
-        // Lấy danh sách ID yêu thích trước, sau đó mới tải các danh sách phim.
+
+        // --- 3. Tải dữ liệu ---
         loadFavoriteIdsAndThenMovies();
     }
+
+    // --- CÁC HÀM LOGIC CŨ GIỮ NGUYÊN ---
+
     private void loadFavoriteIdsAndThenMovies() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Nếu người dùng chưa đăng nhập, tải phim luôn mà không cần check yêu thích
         if (currentUser == null) {
             loadHotMovies();
             loadAllMovies();
             return;
         }
 
-        // Tham chiếu đến nút "favorites" của người dùng hiện tại
         userFavoritesRef = FirebaseDatabase.getInstance().getReference("Users")
                 .child(currentUser.getUid()).child("favorites");
 
-        // Dùng addValueEventListener để lắng nghe sự thay đổi real-time
         favoriteIdsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -98,14 +104,12 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot idSnapshot : snapshot.getChildren()) {
                     favoriteMovieIds.add(idSnapshot.getKey());
                 }
-                // Sau khi có danh sách ID, tiến hành tải phim (hoặc tải lại để cập nhật)
                 loadHotMovies();
                 loadAllMovies();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Nếu có lỗi, vẫn tải phim bình thường
                 Log.e("HomeFragment", "Lỗi tải danh sách yêu thích: ", error.toException());
                 loadHotMovies();
                 loadAllMovies();
@@ -114,9 +118,7 @@ public class HomeFragment extends Fragment {
         userFavoritesRef.addValueEventListener(favoriteIdsListener);
     }
 
-
     private void setupBannerEffects() {
-        // ... (Giữ nguyên không đổi)
         bannerViewPager.setOffscreenPageLimit(3);
         bannerViewPager.setClipToPadding(false);
         bannerViewPager.setClipChildren(false);
@@ -133,7 +135,7 @@ public class HomeFragment extends Fragment {
         DatabaseReference moviesRef = FirebaseDatabase.getInstance().getReference("movies");
         Query query = moviesRef.orderByChild("isHot").equalTo(true);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() { // Dùng Single event để không bị lặp lại
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!isAdded()) return;
@@ -142,16 +144,15 @@ public class HomeFragment extends Fragment {
                     Movie movie = dataSnapshot.getValue(Movie.class);
                     if (movie != null) {
                         movie.setId(dataSnapshot.getKey());
-
-                        // --- (4) KIỂM TRA YÊU THÍCH CHO PHIM HOT ---
                         if (favoriteMovieIds.contains(movie.getId())) {
                             movie.setFavorite(true);
                         }
-
                         hotMoviesList.add(movie);
                     }
                 }
-                bannerAdapter.notifyDataSetChanged();
+                if (bannerAdapter != null) {
+                    bannerAdapter.notifyDataSetChanged();
+                }
 
                 if (!hotMoviesList.isEmpty()) {
                     startBannerAutoScroll();
@@ -160,17 +161,13 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // ... (Giữ nguyên không đổi)
-                if(getContext() != null) {
-                    Toast.makeText(getContext(), "Lỗi tải banner", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }
 
     private void loadAllMovies() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("movies");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() { // Dùng Single event để không bị lặp lại
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!isAdded()) return;
@@ -179,12 +176,9 @@ public class HomeFragment extends Fragment {
                     Movie movie = dataSnapshot.getValue(Movie.class);
                     if (movie != null) {
                         movie.setId(dataSnapshot.getKey());
-
-                        // --- (5) KIỂM TRA YÊU THÍCH CHO TẤT CẢ PHIM ---
                         if (favoriteMovieIds.contains(movie.getId())) {
                             movie.setFavorite(true);
                         }
-
                         allMoviesList.add(movie);
                     }
                 }
@@ -194,7 +188,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // ... (Giữ nguyên không đổi)
                 if(getContext() != null) {
                     Toast.makeText(getContext(), "Lỗi tải danh sách phim", Toast.LENGTH_SHORT).show();
                 }
@@ -203,11 +196,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void startBannerAutoScroll() {
-        // ... (Giữ nguyên không đổi)
         bannerHandler.removeCallbacks(bannerRunnable);
         bannerRunnable = () -> {
-            int currentItem = bannerViewPager.getCurrentItem();
-            if (bannerAdapter.getItemCount() > 0) {
+            if (bannerViewPager != null && bannerAdapter != null && bannerAdapter.getItemCount() > 0) {
+                int currentItem = bannerViewPager.getCurrentItem();
                 int nextItem = (currentItem + 1) % bannerAdapter.getItemCount();
                 bannerViewPager.setCurrentItem(nextItem, true);
             }
@@ -216,7 +208,6 @@ public class HomeFragment extends Fragment {
         bannerHandler.postDelayed(bannerRunnable, 3000);
     }
 
-    // --- (6) THÊM CÁC HÀM VÒNG ĐỜI ĐỂ QUẢN LÝ LISTENER ---
     @Override
     public void onPause() {
         super.onPause();
@@ -234,10 +225,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Gỡ bỏ listener để tránh rò rỉ bộ nhớ khi Fragment bị hủy
         if (userFavoritesRef != null && favoriteIdsListener != null) {
             userFavoritesRef.removeEventListener(favoriteIdsListener);
         }
     }
 }
-//HomeFragment

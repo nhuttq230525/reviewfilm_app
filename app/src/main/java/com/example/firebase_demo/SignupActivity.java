@@ -25,7 +25,7 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_singup);
+        setContentView(R.layout.activity_signup);
 
         textPersonName = findViewById(R.id.textPersonName);
         emailEditText = findViewById(R.id.emailEditText);

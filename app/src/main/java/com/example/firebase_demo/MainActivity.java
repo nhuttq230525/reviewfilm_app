@@ -27,37 +27,33 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(viewPagerAdapter);
 
-        // 1. Tắt tính năng vuốt để người dùng chỉ điều hướng bằng BottomNavigationView.
-        //    Cách này đơn giản và hiệu quả hơn việc xử lý đồng bộ hai chiều.
+        // 1. Tắt tính năng vuốt ngang để trải nghiệm tốt hơn với thanh menu dưới
         viewPager.setUserInputEnabled(false);
 
-        // 2. Đặt giới hạn chỉ tải trang hiện tại (quan trọng nhất để giải quyết lỗi focus).
-        //    Lệnh này ngăn ViewPager tạo các Fragment bên cạnh, loại bỏ xung đột.
+        // 2. Giới hạn load trang để tránh lỗi
         viewPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
 
-
-        // Lắng nghe sự kiện khi người dùng nhấn vào một item trên BottomNavigationView
+        // Lắng nghe sự kiện khi nhấn menu
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                // Sử dụng 'false' để chuyển trang ngay lập tức, không cần hiệu ứng vuốt
+
                 if (itemId == R.id.nav_home) {
-                    viewPager.setCurrentItem(0, false);
+                    viewPager.setCurrentItem(0, false); // Tab 0: Trang chủ
                 } else if (itemId == R.id.nav_search) {
-                    viewPager.setCurrentItem(1, false);
-                } else if (itemId == R.id.nav_category) {
-                    viewPager.setCurrentItem(2, false);
+                    viewPager.setCurrentItem(1, false); // Tab 1: Tìm kiếm
                 } else if (itemId == R.id.nav_favorites) {
-                    viewPager.setCurrentItem(3, false);
+                    viewPager.setCurrentItem(2, false); // Tab 2: Yêu thích (Đã đẩy lên)
                 } else if (itemId == R.id.nav_profile) {
-                    viewPager.setCurrentItem(4, false);
+                    viewPager.setCurrentItem(3, false); // Tab 3: Cá nhân (Đã đẩy lên)
                 }
+
                 return true;
             }
         });
+
         // Đặt trang mặc định khi mở ứng dụng
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
-
     }
 }

@@ -1,66 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/black"
-    android:padding="16dp">
+    android:padding="20dp">
 
-    <!-- PHẦN 1: THÔNG TIN USER -->
+    <!-- 1. AVATAR & EMAIL -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:layout_marginBottom="24dp">
 
         <ImageView
-            android:id="@+id/img_avatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@android:drawable/sym_def_app_icon"
             android:background="@android:color/white"
-            android:padding="2dp"/>
+            android:padding="2dp"
+            android:layout_marginBottom="10dp"/>
 
-
+        <!-- ID CẦN THIẾT 1: tv_email_profile -->
         <TextView
-            android:id="@+id/tv_email"
+            android:id="@+id/tv_email_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="user@email.com"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"/>
-
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng xuất"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#D71D1D"/>
+            android:text="email@example.com"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"/>
     </LinearLayout>
 
-    <!-- ĐƯỜNG KẺ NGANG -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#444"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- PHẦN 2: DANH SÁCH YÊU THÍCH -->
+    <!-- 2. TÊN HIỂN THỊ -->
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên hiển thị"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Phim yêu thích của bạn"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp"/>
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_favorites"
+        <!-- ID CẦN THIẾT 2: edt_display_name -->
+        <EditText
+            android:id="@+id/edt_display_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Nhập tên của bạn"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#555555"
+            android:backgroundTint="#FFFFFF"
+            android:inputType="textPersonName"/>
+
+        <!-- ID CẦN THIẾT 3: btn_save_name -->
+        <Button
+            android:id="@+id/btn_save_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lưu"
+            android:backgroundTint="#FF9800"
+            android:textColor="#FFF"/>
+    </LinearLayout>
+
+    <!-- 3. THỐNG KÊ (Phim yêu thích & Thời gian xem) -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <!-- Thẻ Phim yêu thích -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            app:cardBackgroundColor="#1F1F1F"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- ID CẦN THIẾT 4: tv_favorite_count -->
+                <TextView
+                    android:id="@+id/tv_favorite_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#E91E63"
+                    android:textSize="28sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yêu thích"
+                    android:textColor="#BBB"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Thẻ Thời gian xem -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            app:cardBackgroundColor="#1F1F1F"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- ID CẦN THIẾT 5: tv_watch_time_status -->
+                <TextView
+                    android:id="@+id/tv_watch_time_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="An toàn"
+                    android:textColor="#4CAF50"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <!-- ID CẦN THIẾT 6: tv_watch_minutes -->
+                <TextView
+                    android:id="@+id/tv_watch_minutes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 phút"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    android:textColor="#BBB"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <!-- 4. NÚT ĐĂNG XUẤT -->
+    <!-- ID CẦN THIẾT 7: btn_logout_profile -->
+    <Button
+        android:id="@+id/btn_logout_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đăng xuất"
+        android:backgroundTint="#D32F2F"
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>

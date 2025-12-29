@@ -37,64 +37,67 @@ public class MovieListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+
+        // 1. Nhận tên thể loại từ HomeFragment gửi sang
         categoryName = getIntent().getStringExtra("CATEGORY_NAME");
-        if (categoryName == null || categoryName.isEmpty()) {
-            Toast.makeText(this, "Không nhận được tên thể loại", Toast.LENGTH_SHORT).show();
-            finish(); // Đóng activity nếu không có dữ liệu
-            return;
-        }
+        if (categoryName == null) categoryName = ""; // Tránh lỗi null
+
+        // 2. Ánh xạ View
         toolbar = findViewById(R.id.toolbar_movie_list);
         recyclerView = findViewById(R.id.recycler_view_movie_list);
         progressBar = findViewById(R.id.progress_bar_movie_list);
         tvNoMovies = findViewById(R.id.tv_no_movies);
 
-        // --- Thiết lập Toolbar ---
+        // 3. Thiết lập Toolbar (Tiêu đề + Nút Back)
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Thể loại: " + categoryName);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Hiển thị nút Back
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());  // Xử lý khi nhấn nút Back
+        toolbar.setNavigationOnClickListener(v -> finish()); // Bấm nút back thì đóng activity
 
-        // --- Thiết lập RecyclerView ---
+        // 4. Thiết lập RecyclerView
         movieList = new ArrayList<>();
-
-
-        //  SỬA LỖI Ở ĐÂY: Dùng hàm khởi tạo 2 tham số mới
         movieAdapter = new MovieAdapter(movieList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(movieAdapter);
 
-        // --- Tải dữ liệu từ Firebase ---
+        // 5. Tải dữ liệu
         loadMoviesByCategory(categoryName);
     }
 
     private void loadMoviesByCategory(String category) {
+        // Hiện loading, ẩn danh sách
         progressBar.setVisibility(View.VISIBLE);
-        tvNoMovies.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
+        tvNoMovies.setVisibility(View.GONE);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("movies");
-        Query query = databaseReference.orderByChild("category").equalTo(category);
 
-        query.addValueEventListener(new ValueEventListener() {
+        // Lọc phim theo trường "genre" (hoặc "category" tùy database của bạn)
+        // Lưu ý: Nếu database bạn lưu field là "category" thì sửa "genre" thành "category" bên dưới
+        Query query = databaseReference.orderByChild("genre").equalTo(category);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 movieList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Movie movie = dataSnapshot.getValue(Movie.class);
                     if (movie != null) {
-                        // Vẫn lấy ID để phòng trường hợp cần dùng sau này
                         movie.setId(dataSnapshot.getKey());
                         movieList.add(movie);
                     }
                 }
+                Collections.reverse(movieList); // Phim mới lên đầu
 
-                Collections.reverse(movieList);
+                // Ẩn loading
                 progressBar.setVisibility(View.GONE);
 
+                // Kiểm tra có phim hay không
                 if (movieList.isEmpty()) {
-                    tvNoMovies.setText("Chưa có phim cho thể loại này");
+                    tvNoMovies.setText("Không tìm thấy phim nào thuộc thể loại: " + category);
                     tvNoMovies.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 } else {
@@ -107,9 +110,8 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(MovieListActivity.this, "Lỗi tải dữ liệu: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MovieListActivity.this, "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
-//MovieListActivity

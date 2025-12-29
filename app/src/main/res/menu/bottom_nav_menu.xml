@@ -11,10 +11,6 @@
         android:icon="@drawable/ic_search"
         android:title="Tìm kiếm" />
     <item
-        android:id="@+id/nav_category"
-        android:icon="@drawable/ic_category"
-        android:title="Thể loại"/>
-    <item
         android:id="@+id/nav_favorites"
         android:icon="@drawable/ic_favorite_filled"
         android:title="Yêu thích" />
