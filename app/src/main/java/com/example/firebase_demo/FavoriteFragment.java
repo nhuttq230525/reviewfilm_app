@@ -63,13 +63,13 @@ public class FavoriteFragment extends Fragment {
             return;
         }
 
-        // 1. Lấy danh sách ID phim yêu thích từ node Users
+        //  Lấy danh sách ID phim yêu thích từ node Users
         DatabaseReference favRef = databaseReference.child("Users").child(currentUser.getUid()).child("favorites");
 
         favRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                favoriteMoviesList.clear(); // Xóa list cũ để cập nhật mới
+                favoriteMoviesList.clear();
 
                 if (!snapshot.exists()) {
                     tvEmpty.setVisibility(View.VISIBLE);
@@ -79,7 +79,7 @@ public class FavoriteFragment extends Fragment {
 
                 tvEmpty.setVisibility(View.GONE);
 
-                // 2. Duyệt qua từng ID và lấy thông tin chi tiết phim
+                //  Duyệt qua từng ID và lấy thông tin chi tiết phim
                 for (DataSnapshot data : snapshot.getChildren()) {
                     String movieId = data.getKey();
                     loadMovieDetail(movieId);
@@ -96,7 +96,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void loadMovieDetail(String movieId) {
-        DatabaseReference movieRef = databaseReference.child("movies").child(movieId); // Lưu ý: kiểm tra xem node trên Firebase là "movies" hay "Movies"
+        DatabaseReference movieRef = databaseReference.child("movies").child(movieId);
 
         movieRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

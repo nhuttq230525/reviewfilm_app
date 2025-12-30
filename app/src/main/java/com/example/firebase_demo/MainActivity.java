@@ -19,21 +19,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Ánh xạ views
+
         viewPager = findViewById(R.id.view_pager);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Khởi tạo adapter
+
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(viewPagerAdapter);
 
-        // 1. Tắt tính năng vuốt ngang để trải nghiệm tốt hơn với thanh menu dưới
+
         viewPager.setUserInputEnabled(false);
 
-        // 2. Giới hạn load trang để tránh lỗi
+
         viewPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
 
-        // Lắng nghe sự kiện khi nhấn menu
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -44,16 +44,16 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_search) {
                     viewPager.setCurrentItem(1, false); // Tab 1: Tìm kiếm
                 } else if (itemId == R.id.nav_favorites) {
-                    viewPager.setCurrentItem(2, false); // Tab 2: Yêu thích (Đã đẩy lên)
+                    viewPager.setCurrentItem(2, false); // Tab 2: Yêu thích
                 } else if (itemId == R.id.nav_profile) {
-                    viewPager.setCurrentItem(3, false); // Tab 3: Cá nhân (Đã đẩy lên)
+                    viewPager.setCurrentItem(3, false); // Tab 3: Cá nhân
                 }
 
                 return true;
             }
         });
 
-        // Đặt trang mặc định khi mở ứng dụng
+
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
     }
 }

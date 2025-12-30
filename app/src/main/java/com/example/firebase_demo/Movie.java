@@ -10,11 +10,11 @@ public class Movie {
     private String videoUrl;
     private String year;
     private String duration;
-    // Trường này chỉ dùng cho dữ liệu local, không lưu lên Firebase
+
     @Exclude
     private int posterDrawableId;
 
-    // Trạng thái yêu thích, không lưu trực tiếp vào đối tượng Movie trên DB
+
     @Exclude
     private boolean isFavorite = false;
 

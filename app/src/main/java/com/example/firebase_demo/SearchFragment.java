@@ -44,24 +44,24 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Ánh xạ View
+
         searchEditText = view.findViewById(R.id.search_edit_text);
         recyclerView = view.findViewById(R.id.recycler_view_search_results);
         noResultsLayout = view.findViewById(R.id.layout_no_results);
 
-        // Khởi tạo danh sách và Adapter
+
         allMovies = new ArrayList<>();
         searchResults = new ArrayList<>();
         movieAdapter = new MovieAdapter(searchResults, getContext());
 
-        // Thiết lập RecyclerView
+
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // Hiển thị 2 cột
         recyclerView.setAdapter(movieAdapter);
 
-        // Tải toàn bộ phim từ Firebase một lần duy nhất
+
         loadAllMoviesFromFirebase();
 
-        // Lắng nghe sự kiện nhập liệu
+
         setupSearchEditText();
     }
 
@@ -81,7 +81,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý lỗi nếu có
+
             }
         });
     }
@@ -93,7 +93,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Hủy bỏ tác vụ tìm kiếm cũ (nếu có)
+
                 if (searchRunnable != null) {
                     searchHandler.removeCallbacks(searchRunnable);
                 }
@@ -101,7 +101,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Tạo một tác vụ tìm kiếm mới
+
                 searchRunnable = () -> performSearch(s.toString());
                 searchHandler.postDelayed(searchRunnable, 300);
             }
@@ -121,12 +121,12 @@ public class SearchFragment extends Fragment {
         String lowerCaseQuery = query.toLowerCase().trim();
 
         for (Movie movie : allMovies) {
-            // 1. Kiểm tra xem phim có tiêu đề không để tránh lỗi
+
             if (movie.getTitle() != null) {
-                // 2. Chuyển tiêu đề phim về chữ thường để so sánh
+
                 String movieTitle = movie.getTitle().toLowerCase();
 
-                // 3. Nếu tiêu đề phim chứa chuỗi người dùng nhập, thêm vào kết quả
+
                 if (movieTitle.contains(lowerCaseQuery)) {
                     searchResults.add(movie);
                 }
@@ -134,7 +134,7 @@ public class SearchFragment extends Fragment {
         }
 
 
-        // Cập nhật giao diện
+
         if (searchResults.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             noResultsLayout.setVisibility(View.VISIBLE);

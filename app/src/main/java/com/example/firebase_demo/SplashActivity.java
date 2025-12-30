@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // 1. Khởi tạo Intent để chuyển sang LoginActivity
-                // Ensure LoginActivity.class exists in your project
+
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
 
                 // 2. Bắt đầu Activity mới

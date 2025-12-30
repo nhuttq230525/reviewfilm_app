@@ -105,17 +105,17 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
 
     private void bindViews() {
-        // Player
+
         playerView = findViewById(R.id.video_view);
         progressBar = findViewById(R.id.progress_bar);
         backButton = findViewById(R.id.back_button);
 
-        // Movie Info
+
         tvVideoTitle = findViewById(R.id.tv_video_title);
         tvYear = findViewById(R.id.tv_year);
         tvDuration = findViewById(R.id.tv_duration);
 
-        // Comments
+
         recyclerViewComments = findViewById(R.id.recycler_view_comments);
         edtCommentInput = findViewById(R.id.edt_comment_input);
         btnSendComment = findViewById(R.id.btn_send_comment);
@@ -128,18 +128,17 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private void setupFavoriteReferences() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && movieId != null) {
-            // Tham chiếu đến key "likesCount" trong object phim
+
             movieLikesRef = FirebaseDatabase.getInstance().getReference("Movies").child(movieId).child("likesCount");
 
-            // Tham chiếu đến trạng thái yêu thích của người dùng này đối với phim này
-            // Cấu trúc: Users/{userId}/favorites/{movieId}
+
             userFavoriteStatusRef = FirebaseDatabase.getInstance().getReference("Users")
                     .child(currentUser.getUid()).child("favorites").child(movieId);
         }
     }
 
     private void checkInitialFavoriteStatus() {
-        // 1. Lắng nghe thay đổi của số lượt thích và cập nhật UI
+        // 1. thay đổi của số lượt thích và cập nhật UI
         if (movieLikesRef != null) {
             movieLikesRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -156,7 +155,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             });
         }
 
-        // 2. Lắng nghe trạng thái yêu thích của người dùng và cập nhật nút
+        // 2.  trạng thái yêu thích của người dùng và cập nhật nút
         if (userFavoriteStatusRef != null) {
             userFavoriteStatusRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -299,7 +298,6 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
     private void setupCommentSection() {
         // Trỏ đến nhánh bình luận của phim này trong Firebase
-        // Cấu trúc: /comments/{movieId}
         commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(movieId);
 
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));

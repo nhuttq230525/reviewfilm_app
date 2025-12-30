@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
             // Nếu người dùng chọn "Ghi nhớ", lưu thông tin
             saveLoginCredentials(email, pass, true);
         } else {
-            // Nếu không, xóa thông tin đã lưu
             clearLoginCredentials();
         }
         // firebase

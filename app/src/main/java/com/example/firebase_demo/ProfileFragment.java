@@ -13,10 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-// QUAN TRỌNG: Đảm bảo import đúng package R của dự án bạn
-import com.example.firebase_demo.R;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,8 +36,8 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // 1. Ánh xạ View (Kết nối Java với XML)
-        tvEmail = view.findViewById(R.id.tv_email_profile); // Đã sửa lỗi thiếu code ở đây
+        // 1. Ánh xạ View
+        tvEmail = view.findViewById(R.id.tv_email_profile);
 
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
         tvWatchTimeStatus = view.findViewById(R.id.tv_watch_time_status);
@@ -50,7 +46,7 @@ public class ProfileFragment extends Fragment {
         btnSaveName = view.findViewById(R.id.btn_save_name);
         btnLogout = view.findViewById(R.id.btn_logout_profile);
 
-        // 2. Khởi tạo Firebase
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -58,22 +54,22 @@ public class ProfileFragment extends Fragment {
             currentUserId = currentUser.getUid();
             tvEmail.setText(currentUser.getEmail());
 
-            // Trỏ tới node Users -> UserID trên Firebase
+
             userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserId);
 
-            // Tải dữ liệu người dùng
+
             loadUserProfile();
             loadFavoriteCount();
         } else {
-            // Trường hợp chưa đăng nhập
+
             tvEmail.setText("Chưa đăng nhập");
             btnSaveName.setEnabled(false);
         }
 
-        // 3. Sự kiện bấm nút Lưu tên
+
         btnSaveName.setOnClickListener(v -> saveDisplayName());
 
-        // 4. Sự kiện bấm nút Đăng xuất
+
         btnLogout.setOnClickListener(v -> {
             mAuth.signOut();
             // Chuyển về màn hình đăng nhập và xóa lịch sử activity
@@ -85,25 +81,25 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    // Hàm tải thông tin Profile (Tên và Thời gian xem)
+
     private void loadUserProfile() {
         if (userRef == null) return;
 
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!isAdded()) return; // Kiểm tra fragment còn hoạt động không
+                if (!isAdded()) return;
 
-                // 1. Hiển thị tên hiển thị
+
                 if (snapshot.child("displayName").exists()) {
                     String name = snapshot.child("displayName").getValue(String.class);
                     edtDisplayName.setText(name);
                 }
 
-                // 2. Hiển thị thời gian xem (Đơn vị: phút)
+
                 long minutes = 0;
                 if (snapshot.child("watchTimeMinutes").exists()) {
-                    // Xử lý an toàn để tránh lỗi ép kiểu
+
                     Object value = snapshot.child("watchTimeMinutes").getValue();
                     if (value instanceof Long) {
                         minutes = (Long) value;
@@ -120,7 +116,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý khi lỗi
+
             }
         });
     }

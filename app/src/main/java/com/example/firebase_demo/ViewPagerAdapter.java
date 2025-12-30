@@ -18,10 +18,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {    public ViewPager
             case 1:
                 return new SearchFragment(); // Tìm kiếm
             case 2:
-                // Nếu bạn đã xóa file FavoriteFragment thì dùng ProfileFragment hoặc tạo lại FavoriteFragment
-                // Theo yêu cầu của bạn là "giữ chức năng yêu thích", nếu bạn có file FavoriteFragment.java thì return nó ở đây.
-                // Nếu chưa có, bạn cần tạo file FavoriteFragment.java để hiển thị danh sách yêu thích.
-                return new FavoriteFragment();
+                return new FavoriteFragment();//Yêu thích
             case 3:
                 return new ProfileFragment(); // Cá nhân
             default:

@@ -48,7 +48,7 @@ public class MovieListActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar_movie_list);
         tvNoMovies = findViewById(R.id.tv_no_movies);
 
-        // 3. Thiết lập Toolbar (Tiêu đề + Nút Back)
+        // 3. Thiết lập Toolbar
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Thể loại: " + categoryName);
@@ -68,15 +68,14 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void loadMoviesByCategory(String category) {
-        // Hiện loading, ẩn danh sách
+
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         tvNoMovies.setVisibility(View.GONE);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("movies");
 
-        // Lọc phim theo trường "genre" (hoặc "category" tùy database của bạn)
-        // Lưu ý: Nếu database bạn lưu field là "category" thì sửa "genre" thành "category" bên dưới
+
         Query query = databaseReference.orderByChild("genre").equalTo(category);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,12 +89,12 @@ public class MovieListActivity extends AppCompatActivity {
                         movieList.add(movie);
                     }
                 }
-                Collections.reverse(movieList); // Phim mới lên đầu
+                Collections.reverse(movieList);
 
-                // Ẩn loading
+
                 progressBar.setVisibility(View.GONE);
 
-                // Kiểm tra có phim hay không
+
                 if (movieList.isEmpty()) {
                     tvNoMovies.setText("Không tìm thấy phim nào thuộc thể loại: " + category);
                     tvNoMovies.setVisibility(View.VISIBLE);

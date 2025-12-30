@@ -10,14 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat; // Thư viện để lấy màu
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth; // Thư viện để xác thực và lấy người dùng
-import com.google.firebase.auth.FirebaseUser; // Thư viện để lấy người dùng
-import com.google.firebase.database.DatabaseReference; // Thư viện để tương tác với Realtime DB
-import com.google.firebase.database.FirebaseDatabase; // Thư viện để tương tác với Realtime DB
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -54,7 +54,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         holder.txtWatchVideo.setOnClickListener(v -> {
             String videoUrl = movie.getVideoUrl();
-            // Kiểm tra xem có URL video không
+
             if (videoUrl != null && !videoUrl.isEmpty()) {
                 Intent intent = new Intent(context, VideoPlayerActivity.class);
                 // Bắt buộc:
@@ -63,9 +63,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
                 // Khuyến khích (để hiển thị đầy đủ thông tin):
                 intent.putExtra("MOVIE_TITLE", movie.getTitle());
-                // Giả sử Movie object của bạn có các trường này. Nếu không, bạn có thể truyền chuỗi rỗng ""
-                intent.putExtra("MOVIE_YEAR", movie.getYear()); // Cần có movie.getYear()
-                intent.putExtra("MOVIE_DURATION", movie.getDuration()); // Cần có movie.getDuration()
+                intent.putExtra("MOVIE_YEAR", movie.getYear());
+                intent.putExtra("MOVIE_DURATION", movie.getDuration());
                 context.startActivity(intent);
             } else {
                 Toast.makeText(context, "Link phim không có sẵn", Toast.LENGTH_SHORT).show();
@@ -94,8 +93,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             return;
         }
 
-        // Tham chiếu đến nút "favorites" của người dùng trên Firebase
-        // Cấu trúc: Users -> {UserID} -> favorites -> {MovieID}
         DatabaseReference userFavoritesRef = FirebaseDatabase.getInstance()
                 .getReference("Users")
                 .child(currentUser.getUid())
@@ -103,18 +100,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 .child(movie.getId()); // ID của phim là khóa
 
         if (movie.isFavorite()) {
-            // Nếu phim đang được yêu thích -> Bỏ yêu thích (xóa khỏi Firebase)
             userFavoritesRef.removeValue().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     movie.setFavorite(false);
-                    notifyItemChanged(position); // Cập nhật chỉ item này, hiệu quả hơn
+                    notifyItemChanged(position);
                     Toast.makeText(context, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "Lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
-            // Nếu phim chưa được yêu thích -> Thêm vào yêu thích (lưu giá trị true)
+
             userFavoritesRef.setValue(true).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     movie.setFavorite(true);
@@ -166,4 +162,3 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 }
-//MovieAdapter

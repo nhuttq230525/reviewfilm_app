@@ -15,8 +15,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
 
     private List<Movie> hotMovies;
     private Context context;
-
-    // Constructor để nhận dữ liệu từ HomeFragment
     public BannerAdapter(Context context, List<Movie> hotMovies) {
         this.context = context;
         this.hotMovies = hotMovies;
@@ -39,7 +37,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
                 .load(movie.getPosterUrl())
                 .into(holder.bannerImage);
 
-        // Xử lý sự kiện khi người dùng nhấn vào một banner phim
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, VideoPlayerActivity.class);
             intent.putExtra("videoUrl", movie.getVideoUrl());
@@ -50,11 +48,11 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
 
     @Override
     public int getItemCount() {
-        // Trả về số lượng phim hot
+
         return hotMovies.size();
     }
 
-    // Lớp ViewHolder để giữ các view của một item
+
     public static class BannerViewHolder extends RecyclerView.ViewHolder {
         ImageView bannerImage;
 

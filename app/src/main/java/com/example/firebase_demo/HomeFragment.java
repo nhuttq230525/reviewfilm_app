@@ -34,19 +34,18 @@ import java.util.Set;
 
 public class HomeFragment extends Fragment {
 
-    // --- Khai báo cho phần Banner ---
     private ViewPager2 bannerViewPager;
     private BannerAdapter bannerAdapter;
     private ArrayList<Movie> hotMoviesList;
     private final Handler bannerHandler = new Handler(Looper.getMainLooper());
     private Runnable bannerRunnable;
 
-    // --- Khai báo cho phần Danh sách phim ---
+
     private RecyclerView recyclerViewAllMovies;
     private MovieAdapter allMoviesAdapter;
     private ArrayList<Movie> allMoviesList;
 
-    // --- Khai báo cho phần Yêu thích ---
+
     private Set<String> favoriteMovieIds = new HashSet<>();
     private DatabaseReference userFavoritesRef;
     private ValueEventListener favoriteIdsListener;
@@ -71,7 +70,6 @@ public class HomeFragment extends Fragment {
         }
 
         // --- 2. Thiết lập RecyclerView cho Tất cả Phim ---
-        // Lưu ý: Kiểm tra lại ID trong XML vừa sửa ở bước 1 xem có khớp không
         recyclerViewAllMovies = view.findViewById(R.id.recycler_view_home);
 
         allMoviesList = new ArrayList<>();
@@ -83,7 +81,6 @@ public class HomeFragment extends Fragment {
         loadFavoriteIdsAndThenMovies();
     }
 
-    // --- CÁC HÀM LOGIC CŨ GIỮ NGUYÊN ---
 
     private void loadFavoriteIdsAndThenMovies() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
